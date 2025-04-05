@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน - ชาววังเย็น คาเฟ่</title> <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Pridi:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- การตั้งค่าพื้นฐานและตัวแปรสี (เหมือน shop.html) --- */
+        :root {
+            --bg-color: #fdfaf6; --surface-color: #ffffff; --primary-color: #8d6e63;
+            --secondary-color: #a1887f; --accent-color: #bcaaa4; --text-color: #4e342e;
+            --text-light-color: #795548; --button-bg: var(--primary-color);
+            --button-text: #ffffff; --button-hover-bg: #6d4c41; --border-color: #e0e0e0;
+            --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.08); --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --font-heading: 'Pridi', serif; --font-body: 'Kanit', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background-color: var(--bg-color); color: var(--text-color); line-height: 1.7; padding: 20px; }
+        .container { width: 90%; max-width: 800px; margin: 20px auto; background-color: var(--surface-color); padding: 30px; border-radius: 8px; box-shadow: var(--shadow-medium); }
+        h2, h3 { font-family: var(--font-heading); color: var(--primary-color); text-align: center; margin-bottom: 20px; }
+        h3 { font-size: 1.4rem; margin-top: 30px; border-top: 1px dashed var(--border-color); padding-top: 20px;}
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-light-color); font-size: 0.95rem;}
+        input[type="text"], input[type="tel"], input[type="number"], input[type="file"], button, .form-button { /* ใช้ form-button แทน button ทั่วไปในฟอร์ม */
+            width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 1rem; font-family: inherit; }
+        input[type="number"][readonly] { background-color: #eee; font-weight: bold; cursor: default; }
+        input[type="file"] { padding: 8px; } /* File input ไม่ต้อง padding เยอะ */
+        button, .form-button { cursor: pointer; background-color: var(--button-bg); color: var(--button-text); transition: background-color 0.2s; border: none; }
+        button:hover, .form-button:hover { background-color: var(--button-hover-bg); }
+        button#submitBtn, .form-button#submitBtn { background-color: #2ecc71; } button#submitBtn:hover, .form-button#submitBtn:hover { background-color: #27ae60; }
+        button#save-btn, .form-button#save-btn { background-color: var(--secondary-color); } button#save-btn:hover, .form-button#save-btn:hover { background-color: var(--primary-color); }
+        button#removeImageBtn, .form-button#removeImageBtn { background: #e74c3c; font-size: 0.8rem; padding: 5px 10px; width: auto; margin-top: 5px; margin-bottom: 0;} button#removeImageBtn:hover, .form-button#removeImageBtn:hover { background: #c0392b;}
+
+        #order-list { list-style: none; margin-bottom: 15px; padding-left: 0; }
+        #order-list li { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dotted var(--accent-color); font-size: 0.95rem; }
+        #order-list li:last-child { border-bottom: none; }
+        #order-list .item-info { flex-grow: 1; margin-right: 10px; }
+        #order-list .item-name { font-weight: 500; }
+        #order-list .item-options { font-size: 0.8rem; color: var(--text-light-color); }
+        #order-list .item-price-remove { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .remove-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1rem; padding: 0 5px; line-height: 1; }
+        .remove-btn:hover { color: #c0392b; }
+        #total-price { font-size: 1.2rem; font-weight: 600; text-align: right; margin-top: 10px; margin-bottom: 25px; border-top: 1px solid var(--primary-color); padding-top: 10px; }
+        #total-price label { display: inline; font-weight: normal; color: var(--text-light-color); }
+        #total-price input { display: inline-block; width: auto; border: none; background: none; font-weight: bold; font-size: inherit; text-align: right; padding: 0 5px; margin-bottom: 0; }
+
+        #qrcode-container { text-align: center; margin: 20px 0; }
+        #qrcode { max-width: 250px; height: auto; border: 1px solid var(--border-color); padding: 5px; border-radius: 5px; }
+        #paymentSlipPreview { border-radius: 5px; border: 1px solid var(--border-color); }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        .button-group button, .button-group .form-button { width: 50%; margin-bottom: 0;} /* ใช้ width 50% */
+
+        /* Responsive */
+         @media (max-width: 600px) {
+             body { padding: 10px; }
+             .container { padding: 20px; width: 95%; margin-top: 10px; }
+             h2 { font-size: 1.5rem; } h3 { font-size: 1.2rem;}
+             input, button, .form-button { padding: 10px; font-size: 0.95rem;}
+             #order-list li { flex-wrap: wrap; /* ให้ปุ่มลบลงบรรทัดใหม่ได้ */ }
+             #order-list .item-price-remove { margin-top: 5px; margin-left: auto; /* ดันไปขวาสุด */ }
+             .button-group { flex-direction: column; } /* ปุ่มเรียงแนวตั้ง */
+             .button-group button, .button-group .form-button { width: 100%; }
+         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-qrcode"></i> ชำระเงิน</h2>
+
+        <h3>สรุปรายการสั่งซื้อ</h3>
+        <ul id="order-list">
+            <li>กำลังโหลดรายการ...</li>
+        </ul>
+        <div id="total-price">
+             <label for="amount">ยอดรวม:</label>
+             <input type="number" id="amount" name="amount" value="0" readonly required>
+             <span>บาท</span>
+        </div>
+
+        <form id="paymentForm" enctype="multipart/form-data">
+            <h3>ข้อมูลลูกค้าและยืนยันการชำระเงิน</h3>
+
+            <label for="customerName">ชื่อของลูกค้า:</label>
+            <input type="text" name="customerName" id="customerName" placeholder="กรุณากรอกชื่อ" required>
+
+            <label for="phone">เบอร์โทรศัพท์ (สำหรับติดต่อกลับ):</label>
+            <input type="tel" name="phone" id="phone" placeholder="กรุณากรอกเบอร์โทรศัพท์" required>
+
+            <label for="paymentSlip">แนบสลิปยืนยันการโอนเงิน:</label>
+            <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*" required onchange="previewImage(event)">
+            <div id="imagePreviewContainer" style="margin-top:10px;">
+                <img id="paymentSlipPreview" style="display: none; max-width: 200px; margin-top: 10px; height:auto;">
+                <button type="button" id="removeImageBtn" class="form-button" style="display: none; margin-left: 10px;" onclick="removeImage()">ลบรูปภาพ</button>
+            </div>
+
+            <button type="button" onclick="generateQRCode()" class="form-button" style="margin-top: 20px;"><i class="fas fa-qrcode"></i> แสดง QR Code สำหรับยอดนี้</button>
+
+            <div id="qrcode-container">
+                <img id="qrcode" style="display: none;">
+                <button type="button" id="save-btn" onclick="saveQRCode()" class="form-button" style="display:none; margin-top: 10px;"><i class="fas fa-save"></i> บันทึก QR Code</button>
+            </div>
+
+             <input type="hidden" name="orderDetails" id="orderDetails">
+             <input type="hidden" name="totalAmount" id="totalAmountInput">
+             <input type="hidden" name="paymentSlipBase64" id="paymentSlipBase64">
+             <input type="hidden" name="paymentSlipType" id="paymentSlipType">
+             <input type="hidden" name="paymentSlipName" id="paymentSlipName">
+
+            <button type="submit" id="submitBtn" class="form-button"><i class="fas fa-paper-plane"></i> แจ้งชำระเงินและสั่งซื้อ</button>
+        </form>
+
+        <div class="button-group">
+             <button type="button" onclick="goToShop()" class="form-button"><i class="fas fa-arrow-left"></i> กลับไปยังหน้าร้าน</button>
+        </div>
+    </div>
+
+    <script>
+        // --- ต้องเปลี่ยนค่าเหล่านี้ ---
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyY4m3WgXjdb3-kOIdlp-MEM8TA2r3-1EreqOCiCc2M5isLYoD5x1UkSUvF3L45NDahLQ/exec'; // <<< URL ของ Apps Script ที่จะรับข้อมูล
+        const promptPayId = "0917956349"; // <<< เบอร์โทรศัพท์พร้อมเพย์ผู้รับ
+
+        // --- Element References ---
+        const orderList = document.getElementById('order-list');
+        const totalPriceElement = document.getElementById('total-price');
+        const amountInput = document.getElementById('amount');
+        const qrCodeImage = document.getElementById('qrcode');
+        const saveBtn = document.getElementById('save-btn');
+        const paymentForm = document.getElementById('paymentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const paymentSlipInput = document.getElementById('paymentSlip');
+        const paymentSlipPreview = document.getElementById('paymentSlipPreview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        const orderDetailsInput = document.getElementById('orderDetails');
+        const totalAmountInput = document.getElementById('totalAmountInput');
+        const paymentSlipBase64Input = document.getElementById('paymentSlipBase64');
+        const paymentSlipTypeInput = document.getElementById('paymentSlipType');
+        const paymentSlipNameInput = document.getElementById('paymentSlipName');
+
+        function formatCurrency(number) {
+            return `฿${number.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+        }
+
+        function displayOrder() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let total = 0;
+            let orderDetailsText = "";
+            orderList.innerHTML = '';
+
+            if (cart.length === 0) {
+                 orderList.innerHTML = '<li>ไม่มีสินค้าในตะกร้า กรุณากลับไปเลือกสินค้า</li>';
+                 amountInput.value = 0;
+                 totalPriceElement.style.display = 'none';
+                 submitBtn.disabled = true; submitBtn.style.cursor = 'not-allowed'; submitBtn.style.opacity = 0.6;
+                 qrCodeImage.style.display = 'none'; saveBtn.style.display = 'none';
+                 return;
+             } else {
+                 totalPriceElement.style.display = 'block';
+                 submitBtn.disabled = false; submitBtn.style.cursor = 'pointer'; submitBtn.style.opacity = 1;
+             }
+
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                const itemTotal = item.price * item.quantity;
+                let optionsDisplay = item.optionsText ? `<div class="item-options">${item.optionsText}</div>` : '';
+                li.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-name">${item.name} x ${item.quantity}</span>
+                        ${optionsDisplay}
+                    </div>
+                    <div class="item-price-remove">
+                        <span>${formatCurrency(itemTotal)}</span>
+                        <button class="remove-btn" data-cartid="${item.cartId}" title="ลบรายการนี้">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+                orderList.appendChild(li);
+                total += itemTotal;
+                orderDetailsText += `${item.name}${optionsDisplay ? ' ('+item.optionsText+')' : ''} x ${item.quantity} [${formatCurrency(itemTotal)}]`;
+                if (index < cart.length - 1) orderDetailsText += " | ";
+            });
+
+            amountInput.value = total.toFixed(2);
+            totalAmountInput.value = total.toFixed(2);
+            orderDetailsInput.value = orderDetailsText;
+            totalPriceElement.querySelector('span:last-child').textContent = formatCurrency(total);
+            qrCodeImage.style.display = 'none'; saveBtn.style.display = 'none'; qrCodeImage.src = '';
+        }
+
+        // --- Event Listener สำหรับปุ่มลบในรายการ ---
+         orderList.addEventListener('click', (event) => {
+             const removeButton = event.target.closest('.remove-btn');
+             if (removeButton) {
+                 const cartIdToRemove = removeButton.dataset.cartid;
+                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                 cart = cart.filter(item => item.cartId !== cartIdToRemove);
+                 localStorage.setItem('cart', JSON.stringify(cart));
+                 displayOrder(); // อัปเดตหน้าจอใหม่
+             }
+         });
+
+
+        function generateQRCode() {
+            const totalAmount = parseFloat(amountInput.value);
+            if (!promptPayId || promptPayId === "YOUR_PROMPTPAY_PHONE_NUMBER") {
+                alert("ข้อผิดพลาด: ยังไม่ได้ตั้งค่าเบอร์โทรศัพท์พร้อมเพย์ของผู้รับในโค้ด"); return;
+            }
+            if (totalAmount > 0) {
+                const qrCodeUrl = `https://promptpay.io/${promptPayId}/${totalAmount.toFixed(2)}.png`;
+                qrCodeImage.src = qrCodeUrl;
+                qrCodeImage.style.display = 'block';
+                saveBtn.style.display = 'inline-block';
+                qrCodeImage.onerror = () => { alert("ไม่สามารถสร้าง QR Code ได้"); qrCodeImage.style.display = 'none'; saveBtn.style.display = 'none'; }
+            } else {
+                alert("ไม่มียอดชำระเงินสำหรับสร้าง QR Code");
+            }
+        }
+
+        function saveQRCode() {
+            const qrCodeSrc = qrCodeImage.src;
+            if (!qrCodeSrc || qrCodeSrc.startsWith('data:')) { alert("กรุณาสร้าง QR Code ก่อน"); return; }
+            const link = document.createElement('a');
+            link.href = qrCodeSrc;
+            const totalAmount = parseFloat(amountInput.value);
+            link.download = `PromptPay_QR_${promptPayId}_${totalAmount.toFixed(2)}.png`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+         function previewImage(event) {
+             const reader = new FileReader();
+             reader.onload = function(){
+                 paymentSlipPreview.src = reader.result;
+                 paymentSlipPreview.style.display = 'block';
+                 removeImageBtn.style.display = 'inline-block';
+                 paymentSlipBase64Input.value = reader.result.split(',')[1]; // เก็บเฉพาะ base64 data
+             }
+             if (event.target.files[0]) {
+                 reader.readAsDataURL(event.target.files[0]);
+                 paymentSlipTypeInput.value = event.target.files[0].type;
+                 paymentSlipNameInput.value = event.target.files[0].name;
+             } else { removeImage(); }
+         }
+
+        function removeImage() {
+            paymentSlipInput.value = ""; paymentSlipPreview.src = ""; paymentSlipPreview.style.display = 'none';
+            removeImageBtn.style.display = 'none'; paymentSlipBase64Input.value = "";
+            paymentSlipTypeInput.value = ""; paymentSlipNameInput.value = "";
+        }
+
+        function goToShop() { window.location.href = "shop.html"; } // <<< ตรวจสอบว่าชื่อไฟล์ shop ถูกต้อง
+
+        // --- จัดการการ Submit ฟอร์ม ---
+        paymentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!paymentSlipInput.files || paymentSlipInput.files.length === 0) { alert('กรุณาแนบสลิปยืนยันการโอนเงินก่อน'); return; }
+            if (!document.getElementById('customerName').value || !document.getElementById('phone').value) { alert('กรุณากรอกชื่อและเบอร์โทรศัพท์'); return; }
+            if (!scriptURL || scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') { alert('ข้อผิดพลาด: ยังไม่ได้ตั้งค่า URL ของ Google Apps Script ในโค้ด'); return; }
+
+
+            const formDataForAppsScript = new FormData();
+             formDataForAppsScript.append('customerName', document.getElementById('customerName').value);
+             formDataForAppsScript.append('phone', document.getElementById('phone').value);
+             formDataForAppsScript.append('orderDetails', orderDetailsInput.value);
+             formDataForAppsScript.append('totalAmount', totalAmountInput.value);
+             formDataForAppsScript.append('paymentSlip', paymentSlipBase64Input.value);
+             formDataForAppsScript.append('paymentSlipType', paymentSlipTypeInput.value);
+             formDataForAppsScript.append('paymentSlipName', paymentSlipNameInput.value);
+             formDataForAppsScript.append('timestamp', new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })); // เพิ่มเวลาไทย
+
+            submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+            try {
+                const response = await fetch(scriptURL, { method: 'POST', body: formDataForAppsScript });
+                const resultText = await response.text();
+                console.log("Apps Script Response:", resultText);
+                // --- การตรวจสอบผลลัพธ์จาก Apps Script ---
+                // ควรให้ Apps Script ตอบกลับเป็นข้อความที่ชัดเจน เช่น "Success" หรือ ข้อความ Error
+                if (resultText.trim().toLowerCase() === 'success') { // สมมติว่า Apps Script ตอบ Success
+                    alert('สั่งซื้อและแจ้งชำระเงินเรียบร้อย! ขอบคุณค่ะ');
+                    localStorage.removeItem('cart'); // ล้างตะกร้า
+                    displayOrder(); // อัปเดตหน้าจอ (จะแสดงว่าตะกร้าว่าง)
+                    // อาจจะ redirect ไปหน้าขอบคุณ
+                    // window.location.href = "thankyou.html";
+                } else {
+                    alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล (Server): ' + resultText);
+                    submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> แจ้งชำระเงินและสั่งซื้อ';
+                }
+            } catch (error) {
+                alert('ไม่สามารถเชื่อมต่อเพื่อส่งข้อมูลได้: ' + error);
+                console.error('Error sending data:', error);
+                submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> แจ้งชำระเงินและสั่งซื้อ';
+            }
+        });
+
+        // --- เริ่มการทำงานเมื่อหน้าโหลด ---
+        displayOrder(); // เรียกใช้เพื่อแสดงผลครั้งแรก
+
+    </script>
+</body>
+</html>

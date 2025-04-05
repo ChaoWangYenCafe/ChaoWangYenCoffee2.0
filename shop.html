@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เมนู - ชาววังเย็น คาเฟ่</title> <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Pridi:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CSS ทั้งหมดเหมือนเดิม --- */
+        :root {
+            --bg-color: #fdfaf6; --surface-color: #ffffff; --primary-color: #8d6e63;
+            --secondary-color: #a1887f; --accent-color: #bcaaa4; --text-color: #4e342e;
+            --text-light-color: #795548; --button-bg: var(--primary-color);
+            --button-text: #ffffff; --button-hover-bg: #6d4c41; --border-color: #e0e0e0;
+            --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.08); --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --font-heading: 'Pridi', serif; --font-body: 'Kanit', sans-serif;
+            --header-height: 70px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background-color: var(--bg-color); color: var(--text-color); line-height: 1.7; font-size: 16px; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px 0; }
+        h2 { font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 0.8rem; font-weight: 400; font-size: 2rem; }
+        h3 { font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 0.8rem; font-weight: 400; font-size: 1.5rem; }
+        p { margin-bottom: 1rem; color: var(--text-light-color); }
+        a { color: var(--primary-color); text-decoration: none; } a:hover { text-decoration: underline; }
+        img { max-width: 100%; height: auto; display: block; }
+        header { background-color: var(--surface-color); height: var(--header-height); display: flex; align-items: center; box-shadow: var(--shadow-light); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        header .container { display: flex; justify-content: space-between; align-items: center; padding-top: 0; padding-bottom: 0; width: 100%; }
+        .logo { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 400; color: var(--primary-color); }
+        .logo a { color: inherit; } .logo a:hover { text-decoration: none; }
+        nav { margin-left: auto; margin-right: 30px; display: none; }
+        @media (min-width: 769px) { nav { display: block; } }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        nav ul li a { font-size: 1rem; font-weight: 400; transition: color 0.2s ease; }
+        nav ul li a:hover, nav ul li a.active { color: var(--secondary-color); font-weight: 500; }
+        .cart-icon-header { font-size: 1.4rem; position: relative; cursor: pointer; color: var(--primary-color); transition: color 0.2s ease; }
+        .cart-icon-header:hover { color: var(--secondary-color); }
+        .cart-icon-header .badge { position: absolute; top: -5px; right: -10px; background-color: #e74c3c; color: white; border-radius: 50%; padding: 1px 6px; font-size: 0.7rem; font-weight: 500; min-width: 18px; text-align: center; line-height: 1.2; }
+        .btn { display: inline-block; background-color: var(--button-bg); color: var(--button-text); padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: 400; text-align: center; transition: background-color 0.2s ease, transform 0.1s ease; }
+        .btn:hover { background-color: var(--button-hover-bg); text-decoration: none; transform: translateY(-1px); }
+        .btn:active { transform: scale(0.98); }
+        .btn i { margin-right: 8px; }
+        .btn-checkout { background-color: #2ecc71; }
+        .btn-checkout:hover { background-color: #27ae60; }
+        main { padding-top: 30px; }
+        .section-title { text-align: center; margin-bottom: 20px; }
+        .section-title h2 { margin-bottom: 10px; }
+        .section-title p { max-width: 600px; margin-left: auto; margin-right: auto; font-size: 1rem; margin-bottom: 25px;}
+        #search-bar { display: block; width: 100%; max-width: 500px; margin: 0 auto 30px auto; padding: 12px 15px; font-size: 1rem; font-family: var(--font-body); border: 1px solid var(--border-color); border-radius: 25px; box-shadow: var(--shadow-light); }
+        #search-bar:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(161, 136, 127, 0.3); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .product-card { background-color: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-light); transition: box-shadow 0.3s ease, transform 0.3s ease; display: flex; flex-direction: column; }
+        .product-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-5px); }
+        .product-card.hidden-by-search { display: none; }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; background-color: #eee; }
+        .product-card .content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-card h3 { font-size: 1.2rem; margin-bottom: 8px; font-family: var(--font-body); font-weight: 500; }
+        .product-card .description { font-size: 0.9rem; color: var(--text-light-color); margin-bottom: 15px; flex-grow: 1; min-height: 40px; }
+        .product-card .price { font-size: 1.1rem; font-weight: 600; color: var(--primary-color); margin-bottom: 15px; }
+        .product-options { margin-bottom: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .option-group { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dotted var(--accent-color); }
+        .option-group:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .option-group > label { font-weight: 500; display: block; margin-bottom: 8px; font-size: 1rem; color: var(--primary-color); }
+        .option-group .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+        .option-group .choices label { display: flex; align-items: center; gap: 5px; font-weight: 400; font-size: 0.85rem; margin-bottom: 0; padding: 5px 8px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-group .choices input[type="radio"], .option-group .choices input[type="checkbox"] { margin-right: 3px; accent-color: var(--primary-color); width: 14px; height: 14px; }
+        .option-group .choices label:has(input:checked) { background-color: #f0e9e6; border-color: var(--secondary-color); }
+        .product-card .btn { width: 100%; padding: 10px 15px; font-size: 0.9rem; margin-top: 5px; }
+        #bottom-cart { background-color: #f8f5f1; padding: 25px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: var(--shadow-light); margin-top: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        #bottom-cart h3 { margin-bottom: 20px; text-align: center; font-size: 1.5rem; }
+        #cart-items-list { list-style: none; margin-bottom: 20px; max-height: none; overflow-y: visible; padding-right: 0; border-bottom: 1px solid var(--primary-color); padding-bottom: 15px;}
+        #cart-items-list li { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dotted var(--accent-color); font-size: 0.95rem; }
+        #cart-items-list li:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        #cart-items-list .item-details { flex-grow: 1; margin-right: 15px; }
+        #cart-items-list .item-name { font-weight: 500; display: block; margin-bottom: 4px;}
+        #cart-items-list .item-options { font-size: 0.85rem; color: var(--text-light-color); word-break: break-word;}
+        #cart-items-list .item-actions { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        #cart-items-list .item-price { font-weight: 500; }
+        #cart-items-list .remove-cart-item-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1rem; padding: 0; line-height: 1;}
+        #cart-items-list .remove-cart-item-btn:hover { color: #c0392b; }
+        #cart-total { font-weight: 600; font-size: 1.3rem; border-top: none; padding-top: 15px; margin-top: 0px; display: flex; justify-content: space-between; }
+        #bottom-cart .btn-checkout { width: 100%; margin-top: 20px; padding: 12px 20px; font-size: 1.1rem;}
+        #empty-cart-message { text-align: center; color: var(--text-light-color); padding: 30px 0; font-size: 1rem;}
+        footer { background-color: var(--secondary-color); color: #f0e9e6; text-align: center; padding: 25px 0; margin-top: 40px; font-size: 0.9rem; }
+        @media (max-width: 768px) { nav { display: none; } .product-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; } .product-card img { height: 180px; } .product-card .content { padding: 12px; } .product-card h3 { font-size: 1.1rem; } .option-group .choices label { font-size: 0.8rem; padding: 4px 6px; } .option-group .choices input[type="radio"], .option-group .choices input[type="checkbox"] { width: 12px; height: 12px; } }
+        @media (max-width: 480px) { body { font-size: 15px; } h2 { font-size: 1.5rem; } .container { width: 95%; padding-left:15px; padding-right:15px;} .product-grid { grid-template-columns: 1fr; gap: 20px; } .cart-icon-header { font-size: 1.2rem; } .cart-icon-header .badge { font-size: 0.65rem; min-width: 16px; } #bottom-cart { padding: 20px; } #cart-total { font-size: 1.2rem; } #bottom-cart .btn-checkout { font-size: 1rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo"><a href="shop.html">ชาววังเย็น คาเฟ่</a></div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">เมนู</a></li>
+                    </ul>
+            </nav>
+             <a href="payment.html" class="cart-icon-header" title="ดูตะกร้าและชำระเงิน">
+                 <i class="fas fa-shopping-cart"></i>
+                 <span class="badge">0</span>
+             </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section id="product-listing">
+                <div class="section-title">
+                    <h2>เมนูเครื่องดื่ม</h2>
+                    <p>เลือกเครื่องดื่มแก้วโปรดของคุณ (ทุกรายการ 25 บาท)</p>
+                </div>
+
+                <input type="search" id="search-bar" placeholder="ค้นหาเมนู...">
+
+                <div class="product-grid">
+
+                    <div class="product-card" data-id="P001" data-name="อเมริกาโน่" data-price="25">
+                        <img src="https://placehold.co/300x200/a1887f/4e342e?text=อเมริกาโน่" alt="อเมริกาโน่">
+                        <div class="content"><h3>อเมริกาโน่</h3><p class="description">กาแฟดำเข้มข้น</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P001" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P001" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P001" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P001" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P001" value="ไม่หวาน" checked> ไม่หวาน</label><label><input type="radio" name="sweetness_P001" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P001" value="ปกติ"> ปกติ</label><label><input type="radio" name="sweetness_P001" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P001" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P007" data-name="ลาเต้" data-price="25">
+                        <img src="https://placehold.co/300x200/c8b7a6/4e342e?text=ลาเต้" alt="ลาเต้">
+                        <div class="content"><h3>ลาเต้</h3><p class="description">กาแฟนม นุ่มนวล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P007" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P007" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P007" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P007" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P007" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P007" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P007" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P007" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P007" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P006" data-name="เอสเปรสโซ่" data-price="25">
+                        <img src="https://placehold.co/300x200/6d4c41/fdfaf6?text=เอสเปรสโซ่" alt="เอสเปรสโซ่">
+                        <div class="content"><h3>เอสเปรสโซ่</h3> <p class="description">ช็อตกาแฟเข้มข้น</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P006" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P006" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P006" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P006" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P006" value="ไม่หวาน" checked> ไม่หวาน</label><label><input type="radio" name="sweetness_P006" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P006" value="ปกติ"> ปกติ</label><label><input type="radio" name="sweetness_P006" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P006" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P004" data-name="คาปูชิโน่" data-price="25">
+                        <img src="https://placehold.co/300x200/a1887f/fdfaf6?text=คาปูชิโน่" alt="คาปูชิโน่">
+                        <div class="content"><h3>คาปูชิโน่</h3><p class="description">กาแฟนมฟองนุ่ม</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P004" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P004" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P004" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P004" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P004" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P004" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P004" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P004" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P004" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P008" data-name="ชาเขียว" data-price="25">
+                         <img src="https://placehold.co/300x200/a5d6a7/4e342e?text=ชาเขียว" alt="ชาเขียว">
+                         <div class="content"><h3>ชาเขียว</h3><p class="description">ชาเขียวมัทฉะ/นม</p><div class="product-options">
+                             <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P008" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P008" value="เย็น" checked> เย็น</label></div></div>
+                             <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P008" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P008" value="ปั่น"> ปั่น</label></div></div>
+                             <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P008" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P008" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P008" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P008" value="หวานมาก"> หวานมาก</label></div></div>
+                             <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P008" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                         </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P009" data-name="ชาเขียวลิ้นจี่" data-price="25">
+                        <img src="https://placehold.co/300x200/f8bbd0/4e342e?text=ชาเขียวลิ้นจี่" alt="ชาเขียวลิ้นจี่">
+                        <div class="content"><h3>ชาเขียวลิ้นจี่</h3><p class="description">ชาเขียวผสมไซรัปลิ้นจี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P009" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P009" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P009" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P009" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P009" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P009" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P009" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P009" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P009" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P010" data-name="ชาเขียวแอปเปิล" data-price="25">
+                        <img src="https://placehold.co/300x200/c8e6c9/4e342e?text=ชาเขียวแอปเปิล" alt="ชาเขียวแอปเปิล">
+                        <div class="content"><h3>ชาเขียวแอปเปิล</h3><p class="description">ชาเขียวผสมไซรัปแอปเปิล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P010" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P010" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P010" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P010" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P010" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P010" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P010" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P010" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P010" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P011" data-name="ชาเขียวสตอเบอรี่" data-price="25">
+                        <img src="https://placehold.co/300x200/ffcdd2/4e342e?text=ชาเขียวสตอเบอรี่" alt="ชาเขียวสตอเบอรี่">
+                        <div class="content"><h3>ชาเขียวสตอเบอรี่</h3><p class="description">ชาเขียวผสมไซรัปสตอเบอรี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P011" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P011" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P011" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P011" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P011" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P011" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P011" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P011" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P011" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P012" data-name="ชาเย็น" data-price="25">
+                        <img src="https://placehold.co/300x200/ffab91/4e342e?text=ชาเย็น" alt="ชาเย็น">
+                        <div class="content"><h3>ชาเย็น</h3><p class="description">ชาไทยสีส้ม เข้มข้น</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P012" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P012" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P012" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P012" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P012" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P012" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P012" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P012" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P012" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P013" data-name="ชาเขียวกีวี่" data-price="25">
+                        <img src="https://placehold.co/300x200/dcedc8/4e342e?text=ชาเขียวกีวี่" alt="ชาเขียวกีวี่">
+                        <div class="content"><h3>ชาเขียวกีวี่</h3><p class="description">ชาเขียวผสมไซรัปกีวี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P013" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P013" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P013" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P013" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P013" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P013" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P013" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P013" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P013" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P014" data-name="ชามะลิ" data-price="25">
+                        <img src="https://placehold.co/300x200/fff9c4/4e342e?text=ชามะลิ" alt="ชามะลิ">
+                        <div class="content"><h3>ชามะลิ</h3><p class="description">ชาหอมกลิ่นมะลิ</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P014" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P014" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P014" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P014" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P014" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P014" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P014" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P014" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P014" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P015" data-name="ชามะนาว" data-price="25">
+                        <img src="https://placehold.co/300x200/fff59d/4e342e?text=ชามะนาว" alt="ชามะนาว">
+                        <div class="content"><h3>ชามะนาว</h3><p class="description">ชาดำเปรี้ยวมะนาว</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P015" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P015" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P015" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P015" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P015" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P015" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P015" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P015" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P015" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P016" data-name="ชาเขียวมะนาว" data-price="25">
+                        <img src="https://placehold.co/300x200/dcedc8/4CAF50?text=ชาเขียวมะนาว" alt="ชาเขียวมะนาว">
+                        <div class="content"><h3>ชาเขียวมะนาว</h3><p class="description">ชาเขียวเปรี้ยวมะนาว</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P016" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P016" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P016" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P016" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P016" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P016" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P016" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P016" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P016" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P017" data-name="ชาดำ" data-price="25">
+                        <img src="https://placehold.co/300x200/795548/ffffff?text=ชาดำ" alt="ชาดำ">
+                        <div class="content"><h3>ชาดำ</h3><p class="description">ชาดำคลาสสิก</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P017" value="ร้อน" checked> ร้อน</label><label><input type="radio" name="temp_P017" value="เย็น"> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P017" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P017" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P017" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P017" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P017" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P017" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P017" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P018" data-name="ชาเย็นโอริโอ้" data-price="25">
+                        <img src="https://placehold.co/300x200/ffccbc/000000?text=ชาเย็นโอริโอ้" alt="ชาเย็นโอริโอ้">
+                        <div class="content"><h3>ชาเย็นโอริโอ้</h3><p class="description">ชาเย็นปั่นกับโอริโอ้</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P018" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P018" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P018" value="ไม่ปั่น"> ไม่ปั่น</label><label><input type="radio" name="blend_P018" value="ปั่น" checked> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P018" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P018" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P018" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P018" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P018" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P019" data-name="ชาเย็นคาราเมล" data-price="25">
+                        <img src="https://placehold.co/300x200/ffecb3/795548?text=ชาเย็นคาราเมล" alt="ชาเย็นคาราเมล">
+                        <div class="content"><h3>ชาเย็นคาราเมล</h3><p class="description">ชาเย็นหอมคาราเมล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P019" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P019" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P019" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P019" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P019" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P019" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P019" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P019" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P019" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P020" data-name="ชาเขียวน้ำผึ้งมะนาว" data-price="25">
+                        <img src="https://placehold.co/300x200/f0f4c3/8BC34A?text=ชาเขียวน้ำผึ้งมะนาว" alt="ชาเขียวน้ำผึ้งมะนาว">
+                        <div class="content"><h3>ชาเขียวน้ำผึ้งมะนาว</h3><p class="description">สดชื่นน้ำผึ้งมะนาว</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P020" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P020" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P020" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P020" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P020" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P020" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P020" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P020" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P020" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P021" data-name="ชาเขียวดำ" data-price="25">
+                        <img src="https://placehold.co/300x200/558b2f/ffffff?text=ชาเขียวดำ" alt="ชาเขียวดำ">
+                        <div class="content"><h3>ชาเขียวดำ</h3><p class="description">รสชาติชาเขียวเข้ม</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P021" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P021" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P021" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P021" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P021" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P021" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P021" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P021" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P021" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P022" data-name="ชาเขียวคาราเมล" data-price="25">
+                        <img src="https://placehold.co/300x200/b0bec5/3e2723?text=ชาเขียวคาราเมล" alt="ชาเขียวคาราเมล">
+                        <div class="content"><h3>ชาเขียวคาราเมล</h3><p class="description">ชาเขียวหอมคาราเมล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P022" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P022" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P022" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P022" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P022" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P022" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P022" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P022" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P022" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P023" data-name="ชาเขียวโอริโอ้" data-price="25">
+                        <img src="https://placehold.co/300x200/a5d6a7/000000?text=ชาเขียวโอริโอ้" alt="ชาเขียวโอริโอ้">
+                        <div class="content"><h3>ชาเขียวโอริโอ้</h3><p class="description">ชาเขียวปั่นกับโอริโอ้</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P023" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P023" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P023" value="ไม่ปั่น"> ไม่ปั่น</label><label><input type="radio" name="blend_P023" value="ปั่น" checked> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P023" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P023" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P023" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P023" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P023" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P024" data-name="นมสด" data-price="25">
+                        <img src="https://placehold.co/300x200/e3f2fd/42a5f5?text=นมสด" alt="นมสด">
+                        <div class="content"><h3>นมสด</h3><p class="description">นมสดแท้ หอมมัน</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P024" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P024" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P024" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P024" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P024" value="ไม่หวาน" checked> ไม่หวาน</label><label><input type="radio" name="sweetness_P024" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P024" value="ปกติ"> ปกติ</label><label><input type="radio" name="sweetness_P024" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P024" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P025" data-name="โยเกิร์ต" data-price="25">
+                         <img src="https://placehold.co/300x200/fce4ec/8e24aa?text=โยเกิร์ต" alt="โยเกิร์ต">
+                         <div class="content"><h3>โยเกิร์ต (สมูทตี้)</h3><p class="description">โยเกิร์ตปั่น สดชื่น</p><div class="product-options">
+                             <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P025" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P025" value="เย็น" checked> เย็น</label></div></div>
+                             <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P025" value="ไม่ปั่น"> ไม่ปั่น</label><label><input type="radio" name="blend_P025" value="ปั่น" checked> ปั่น</label></div></div>
+                             <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P025" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P025" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P025" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P025" value="หวานมาก"> หวานมาก</label></div></div>
+                             <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P025" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                         </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                     </div>
+
+                     <div class="product-card" data-id="P026" data-name="นมสดคาราเมล" data-price="25">
+                        <img src="https://placehold.co/300x200/fff8e1/fb8c00?text=นมสดคาราเมล" alt="นมสดคาราเมล">
+                        <div class="content"><h3>นมสดคาราเมล</h3><p class="description">นมสดหอมคาราเมล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P026" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P026" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P026" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P026" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P026" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P026" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P026" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P026" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P026" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                    <div class="product-card" data-id="P027" data-name="นมสดสตอเบอร์รี่" data-price="25">
+                        <img src="https://placehold.co/300x200/fce4ec/e91e63?text=นมสดสตอเบอร์รี่" alt="นมสดสตอเบอร์รี่">
+                        <div class="content"><h3>นมสดสตอเบอร์รี่</h3><p class="description">นมสดผสมซอสสตอเบอร์รี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P027" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P027" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P027" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P027" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P027" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P027" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P027" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P027" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P027" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P028" data-name="โยเกิร์ตสตอเบอร์รี่" data-price="25">
+                        <img src="https://placehold.co/300x200/f8bbd0/c2185b?text=โยเกิร์ตสตอเบอร์รี่" alt="โยเกิร์ตสตอเบอร์รี่">
+                        <div class="content"><h3>โยเกิร์ตสตอเบอร์รี่</h3><p class="description">โยเกิร์ตปั่นกับสตอเบอร์รี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P028" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P028" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P028" value="ไม่ปั่น"> ไม่ปั่น</label><label><input type="radio" name="blend_P028" value="ปั่น" checked> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P028" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P028" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P028" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P028" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P028" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div>
+                    </div>
+
+                     <div class="product-card" data-id="P029" data-name="ลิ้นจี่โซดา" data-price="25">
+                         <img src="https://placehold.co/300x200/f48fb1/d81b60?text=ลิ้นจี่โซดา" alt="ลิ้นจี่โซดา">
+                         <div class="content"><h3>ลิ้นจี่โซดา</h3><p class="description">โซดาซ่าส์ หอมลิ้นจี่</p><div class="product-options">
+                             <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P029" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P029" value="เย็น" checked> เย็น</label></div></div>
+                             <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P029" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P029" value="ปั่น"> ปั่น</label></div></div>
+                             <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P029" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P029" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P029" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P029" value="หวานมาก"> หวานมาก</label></div></div>
+                             <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P029" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                         </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                    <div class="product-card" data-id="P030" data-name="กีวี่โซดา" data-price="25">
+                        <img src="https://placehold.co/300x200/a5d6a7/388e3c?text=กีวี่โซดา" alt="กีวี่โซดา">
+                        <div class="content"><h3>กีวี่โซดา</h3><p class="description">โซดาซ่าส์ หอมกีวี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P030" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P030" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P030" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P030" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P030" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P030" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P030" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P030" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P030" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                     <div class="product-card" data-id="P031" data-name="ฝรั่งโซดา" data-price="25">
+                         <img src="https://placehold.co/300x200/e6ee9c/9e9d24?text=ฝรั่งโซดา" alt="ฝรั่งโซดา">
+                         <div class="content"><h3>ฝรั่งโซดา</h3><p class="description">โซดาซ่าส์ หอมฝรั่ง</p><div class="product-options">
+                             <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P031" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P031" value="เย็น" checked> เย็น</label></div></div>
+                             <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P031" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P031" value="ปั่น"> ปั่น</label></div></div>
+                             <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P031" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P031" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P031" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P031" value="หวานมาก"> หวานมาก</label></div></div>
+                             <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P031" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                         </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                     <div class="product-card" data-id="P032" data-name="แดงโซดา" data-price="25">
+                         <img src="https://placehold.co/300x200/ff8a80/b71c1c?text=แดงโซดา" alt="แดงโซดา">
+                         <div class="content"><h3>แดงโซดา</h3><p class="description">น้ำแดงผสมโซดา</p><div class="product-options">
+                             <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P032" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P032" value="เย็น" checked> เย็น</label></div></div>
+                             <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P032" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P032" value="ปั่น"> ปั่น</label></div></div>
+                             <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P032" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P032" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P032" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P032" value="หวานมาก"> หวานมาก</label></div></div>
+                             <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P032" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                         </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                    <div class="product-card" data-id="P033" data-name="แอปเปิลโซดา" data-price="25">
+                        <img src="https://placehold.co/300x200/c8e6c9/558b2f?text=แอปเปิลโซดา" alt="แอปเปิลโซดา">
+                        <div class="content"><h3>แอปเปิลโซดา</h3><p class="description">โซดาซ่าส์ หอมแอปเปิล</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P033" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P033" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P033" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P033" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P033" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P033" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P033" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P033" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P033" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                    <div class="product-card" data-id="P034" data-name="สตอเบอรี่โซดา" data-price="25">
+                        <img src="https://placehold.co/300x200/ffcdd2/c62828?text=สตอเบอรี่โซดา" alt="สตอเบอรี่โซดา">
+                        <div class="content"><h3>สตอเบอรี่โซดา</h3><p class="description">โซดาซ่าส์ หอมสตอเบอรี่</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P034" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P034" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P034" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P034" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P034" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P034" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P034" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P034" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P034" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                    <div class="product-card" data-id="P035" data-name="สัปปะรดโซดา" data-price="25">
+                        <img src="https://placehold.co/300x200/fff9c4/f57f17?text=สัปปะรดโซดา" alt="สัปปะรดโซดา">
+                        <div class="content"><h3>สัปปะรดโซดา</h3><p class="description">โซดาซ่าส์ หอมสัปปะรด</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P035" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P035" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P035" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P035" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P035" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P035" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P035" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P035" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P035" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+                    <div class="product-card" data-id="P036" data-name="แดงโซดามะนาว" data-price="25">
+                        <img src="https://placehold.co/300x200/ff8a80/c62828?text=แดงโซดามะนาว" alt="แดงโซดามะนาว">
+                        <div class="content"><h3>แดงโซดามะนาว</h3><p class="description">น้ำแดงโซดา เปรี้ยวซ่ามะนาว</p><div class="product-options">
+                            <div class="option-group"><label>อุณหภูมิ:</label><div class="choices"><label><input type="radio" name="temp_P036" value="ร้อน"> ร้อน</label><label><input type="radio" name="temp_P036" value="เย็น" checked> เย็น</label></div></div>
+                            <div class="option-group"><label>รูปแบบ:</label><div class="choices"><label><input type="radio" name="blend_P036" value="ไม่ปั่น" checked> ไม่ปั่น</label><label><input type="radio" name="blend_P036" value="ปั่น"> ปั่น</label></div></div>
+                            <div class="option-group"><label>ระดับความหวาน:</label><div class="choices"><label><input type="radio" name="sweetness_P036" value="ไม่หวาน"> ไม่หวาน</label><label><input type="radio" name="sweetness_P036" value="หวานน้อย"> หวานน้อย</label><label><input type="radio" name="sweetness_P036" value="ปกติ" checked> ปกติ</label><label><input type="radio" name="sweetness_P036" value="หวานมาก"> หวานมาก</label></div></div>
+                            <div class="option-group"><label>ท็อปปิ้ง:</label><div class="choices"><label><input type="checkbox" name="topping_P036" value="ไข่มุก" data-price-adjust="5"> ไข่มุก (+5)</label></div></div>
+                        </div><div class="price">฿25</div><button class="btn add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่ม</button></div></div>
+
+                    </div></section>
+
+            <aside id="bottom-cart">
+                <h3><i class="fas fa-shopping-cart"></i> ตะกร้าสินค้า</h3>
+                <ul id="cart-items-list">
+                     <p id="empty-cart-message">ตะกร้าของคุณว่างอยู่</p>
+                     </ul>
+                <div id="cart-total">
+                    <span>ยอดรวม:</span>
+                    <span>฿0</span>
+                </div>
+                <a href="payment.html" id="checkout-button" class="btn btn-checkout" style="display: none;"><i class="fas fa-credit-card"></i> ชำระเงิน</a>
+            </aside>
+
+        </div></main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ชาววังเย็น คาเฟ่ | พัฒนาเป็น Template โดย Gemini</p>
+        </div>
+    </footer>
+
+    <script>
+        // **** โค้ด JavaScript ทั้งหมดเหมือนเดิม ****
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            const cartBadge = document.querySelector('.cart-icon-header .badge');
+            const cartItemsList = document.getElementById('cart-items-list');
+            const cartTotalElement = document.getElementById('cart-total')?.querySelector('span:last-child');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const checkoutButton = document.getElementById('checkout-button');
+            const searchBar = document.getElementById('search-bar');
+            const productCards = document.querySelectorAll('.product-card');
+
+            function formatCurrency(number) {
+                return `฿${number.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+            }
+
+            function getSelectedOptionsAndPrice(cardElement) {
+                const options = {}; let extraPrice = 0; const selectedOptionsText = [];
+                const today = new Date(); const isWednesday = today.getDay() === 3;
+
+                cardElement.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(input => {
+                    const optionName = input.name.replace(`_${cardElement.dataset.id}`, '');
+                    const optionValue = input.value;
+                    const priceAdjust = parseFloat(input.dataset.priceAdjust || 0);
+
+                    if (input.type === 'radio') {
+                        options[optionName] = optionValue;
+                    } else {
+                        if (!options[optionName]) options[optionName] = [];
+                        options[optionName].push(optionValue);
+                        if (optionValue === 'ไข่มุก') {
+                            if (!isWednesday) { extraPrice += priceAdjust; }
+                        } else { extraPrice += priceAdjust; }
+                    }
+                });
+
+                 const radioGroups = new Set();
+                 cardElement.querySelectorAll('input[type="radio"]').forEach(r => radioGroups.add(r.name));
+                 radioGroups.forEach(groupName => {
+                     const optionKey = groupName.replace(`_${cardElement.dataset.id}`, '');
+                     if (!options[optionKey]) {
+                         const defaultChecked = cardElement.querySelector(`input[name="${groupName}"]:checked`);
+                         if (defaultChecked) { options[optionKey] = defaultChecked.value; }
+                     }
+                 });
+
+                // --- สร้างข้อความแสดงผลเรียงตามลำดับ ---
+                if(options.temp) selectedOptionsText.push(options.temp);
+                if(options.temp === 'เย็น' && options.blend) { selectedOptionsText.push(options.blend); }
+                else if (options.temp === 'ร้อน' && options.blend && options.blend !== 'ปั่น'){ selectedOptionsText.push(options.blend); }
+                else if (options.blend && !options.temp) { selectedOptionsText.push(options.blend); }
+                if(options.sweetness) selectedOptionsText.push(options.sweetness);
+                if(options.topping && options.topping.includes('ไข่มุก')){
+                     if (isWednesday) { selectedOptionsText.push("ไข่มุก (ฟรี!)"); }
+                     else { selectedOptionsText.push("ไข่มุก"); }
+                 }
+
+                if(options.topping) options.topping.sort();
+                return { options, extraPrice, optionsText: selectedOptionsText.filter(Boolean).join(', ') };
+            }
+
+            function updateCartDisplay() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let totalQuantity = 0; let totalPrice = 0;
+                if(cartItemsList) cartItemsList.innerHTML = '';
+
+                if (cart.length === 0) {
+                    if(emptyCartMessage) emptyCartMessage.style.display = 'block';
+                    if(checkoutButton) checkoutButton.style.display = 'none';
+                } else {
+                    if(emptyCartMessage) emptyCartMessage.style.display = 'none';
+                    cart.forEach(item => {
+                        totalQuantity += item.quantity;
+                        totalPrice += item.price * item.quantity;
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="item-details">
+                                <span class="item-name">${item.name} <span class="item-qty">(x${item.quantity})</span></span>
+                                ${item.optionsText ? `<span class="item-options">${item.optionsText}</span>` : ''}
+                            </div>
+                            <div class="item-actions">
+                                <span class="item-price">${formatCurrency(item.price * item.quantity)}</span>
+                                <button class="remove-cart-item-btn" data-cartid="${item.cartId}" title="ลบรายการนี้">
+                                    <i class="fas fa-times-circle"></i>
+                                </button>
+                            </div>`;
+                        if(cartItemsList) cartItemsList.appendChild(li);
+                    });
+                    if(checkoutButton) checkoutButton.style.display = 'block';
+                }
+                if (cartBadge) cartBadge.textContent = totalQuantity;
+                if (cartTotalElement) cartTotalElement.textContent = formatCurrency(totalPrice);
+            }
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const card = event.target.closest('.product-card');
+                    if (!card) return;
+                    const productId = card.dataset.id;
+                    const productName = card.dataset.name;
+                    const basePrice = parseFloat(card.dataset.price);
+                    const { options, extraPrice, optionsText } = getSelectedOptionsAndPrice(card);
+                    const finalPrice = basePrice + extraPrice;
+                    const quantityToAdd = 1;
+
+                    let optionsKey = Object.entries(options).sort(([keyA], [keyB]) => keyA.localeCompare(keyB)).map(([key, value]) => `${key}:${Array.isArray(value) ? value.sort().join(',') : value}`).join('|');
+                    const cartItemId = `${productId}|${optionsKey}`;
+
+                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const existingItemIndex = cart.findIndex(item => item.cartId === cartItemId);
+
+                    if (existingItemIndex > -1) {
+                        cart[existingItemIndex].quantity += quantityToAdd;
+                    } else {
+                        const newItem = { cartId: cartItemId, id: productId, name: productName, price: finalPrice, quantity: quantityToAdd, options: options, optionsText: optionsText };
+                        cart.push(newItem);
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartDisplay();
+
+                    button.innerHTML = '<i class="fas fa-check"></i> เพิ่มแล้ว';
+                    button.disabled = true;
+                    setTimeout(() => { button.innerHTML = '<i class="fas fa-cart-plus"></i> เพิ่ม'; button.disabled = false; }, 1500);
+                });
+            });
+
+            if (searchBar) {
+                searchBar.addEventListener('input', (event) => {
+                    const searchTerm = event.target.value.toLowerCase().trim();
+                    productCards.forEach(card => {
+                        const productName = (card.dataset.name || '').toLowerCase();
+                        if (productName.includes(searchTerm)) {
+                            card.classList.remove('hidden-by-search');
+                            card.style.display = '';
+                        } else {
+                            card.classList.add('hidden-by-search');
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+
+             if (cartItemsList) {
+                 cartItemsList.addEventListener('click', (event) => {
+                     const removeButton = event.target.closest('.remove-cart-item-btn');
+                     if (removeButton) {
+                         const cartIdToRemove = removeButton.dataset.cartid;
+                         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                         cart = cart.filter(item => item.cartId !== cartIdToRemove);
+                         localStorage.setItem('cart', JSON.stringify(cart));
+                         updateCartDisplay();
+                     }
+                 });
+             }
+
+            updateCartDisplay(); // Initial load
+        });
+    </script>
+</body>
+</html>
