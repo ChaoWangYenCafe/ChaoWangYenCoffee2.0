@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#8d6e63"> ```
+    <meta name="theme-color" content="#8d6e63"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ยินดีต้อนรับสู่ ชาววังเย็น คาเฟ่</title> <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Pridi:wght@300;400&display=swap" rel="stylesheet">
