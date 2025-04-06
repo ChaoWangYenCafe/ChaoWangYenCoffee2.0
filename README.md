@@ -1,6 +1,8 @@
 
 <html lang="th">
 <head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8d6e63"> ```
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ยินดีต้อนรับสู่ ชาววังเย็น คาเฟ่</title> <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Pridi:wght@300;400&display=swap" rel="stylesheet">
@@ -79,5 +81,19 @@
         <h1>ชาววังเย็น คาเฟ่</h1> <p>สัมผัสรสชาติกาแฟแท้และเบเกอรี่โฮมเมด</p>
         <a href="shop.html" class="btn"><i class="fas fa-store"></i> ดูเมนูและสั่งซื้อ</a>
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js') // ต้องแน่ใจว่า path ถูกต้อง
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
+</body>
