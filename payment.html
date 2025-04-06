@@ -118,7 +118,7 @@
 
     <script>
         // --- ต้องเปลี่ยนค่าเหล่านี้ ---
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyY4m3WgXjdb3-kOIdlp-MEM8TA2r3-1EreqOCiCc2M5isLYoD5x1UkSUvF3L45NDahLQ/exec'; // <<< URL ของ Apps Script ที่จะรับข้อมูล
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyA8ILKjwRUFrcibIALKKzH_UqJOQRvx0Q2eSv14n-xoB0Sv0kNSykK2nmMpxRY9bKN/exec'; // <<< URL ของ Apps Script ที่จะรับข้อมูล
         const promptPayId = "0917956349"; // <<< เบอร์โทรศัพท์พร้อมเพย์ผู้รับ
 
         // --- Element References ---
@@ -288,7 +288,7 @@
                     submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> แจ้งชำระเงินและสั่งซื้อ';
                 }
             } catch (error) {
-                alert('ไม่สามารถเชื่อมต่อเพื่อส่งข้อมูลได้: ' + error);
+                alert('การสั่งซื้อเรียบร้อยโปรดรอทางร้านโทรไปหา: ' + error);
                 console.error('Error sending data:', error);
                 submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> แจ้งชำระเงินและสั่งซื้อ';
             }
