@@ -76,7 +76,7 @@
          .btn i { margin-right: 8px; }
     </style>
 </head>
-<body>
+
     <div class="landing-content">
         <h1>ชาววังเย็น คาเฟ่</h1> <p>สัมผัสรสชาติกาแฟแท้และเบเกอรี่โฮมเมด</p>
         <a href="shop.html" class="btn"><i class="fas fa-store"></i> ดูเมนูและสั่งซื้อ</a>
@@ -94,5 +94,5 @@
             });
         }
     </script>
-</html>
+
 
