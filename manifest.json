@@ -1,0 +1,24 @@
+{
+  "name": "ชาววังเย็น คาเฟ่",
+  "short_name": "ชาววังเย็น",
+  "description": "สั่งเครื่องดื่มอร่อยๆ จากร้านชาววังเย็น คาเฟ่",
+  "start_url": "./index.html", // หน้าแรกที่จะเปิดเมื่อกดไอคอน
+  "display": "standalone", // แสดงผลแบบแอป (ไม่มี UI เบราว์เซอร์)
+  "background_color": "#fdfaf6", // สีพื้นหลังตอนโหลด (Splash Screen)
+  "theme_color": "#8d6e63", // สีแถบเครื่องมือของเบราว์เซอร์/OS
+  "orientation": "portrait-primary", // แนะนำให้แสดงผลแนวตั้ง
+  "icons": [
+    {
+      "src": "images/icons/icon-192x192.png", // <<< ต้องสร้างไฟล์ไอคอนนี้เอง
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable" // Allows icon to adapt shape
+    },
+    {
+      "src": "images/icons/icon-512x512.png", // <<< ต้องสร้างไฟล์ไอคอนนี้เอง
+      "sizes": "512x512",
+      "type": "image/png",
+       "purpose": "any maskable"
+    }
+  ]
+}
